@@ -6,7 +6,7 @@ import de.iotus.cloud.api.console.ConsoleReader;
 import de.iotus.cloud.api.database.DatabaseManager;
 import de.iotus.cloud.api.logging.LogLevel;
 import de.iotus.cloud.api.logging.Logger;
-import de.iotus.cloud.master.command.InfoCommand;
+import de.iotus.cloud.api.network.PacketServer;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +26,7 @@ public class Master {
     public DatabaseManager databaseManager;
     public JsonObject config;
     public ConsoleReader console;
+    public PacketServer server;
 
     public Master() {
         instance = this;
@@ -43,7 +44,11 @@ public class Master {
         databaseManager = new DatabaseManager(mongoConfig.getString("host", "127.0.0.1"), mongoConfig.getInt("port", 27017), mongoConfig.getString("database", ""), mongoConfig.getString("user", ""), mongoConfig.getString("password", ""));
         logger.log("Mit der Datenbank verbunden", LogLevel.INFO);
         console = new ConsoleReader();
-        console.register("info", new InfoCommand());
+        server = new PacketServer(1241);
+        server.bind();
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            server.close();
+        }));
     }
 
     public static void main(String[] args) throws IOException {

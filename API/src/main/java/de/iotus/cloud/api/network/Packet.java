@@ -10,7 +10,7 @@ public class Packet implements Serializable {
 
     private String packetName;
 
-    Packet(String packetName) {
+    public Packet(String packetName) {
         this.packetName = packetName;
     }
 
