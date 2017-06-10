@@ -1,6 +1,6 @@
-package de.iotus.cloud.api.network;
+package org.lotuscloud.api.network;
 
-import de.iotus.cloud.api.packet.ErrorPacket;
+import org.lotuscloud.api.packet.ErrorPacket;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

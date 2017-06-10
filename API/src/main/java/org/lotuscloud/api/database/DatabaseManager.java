@@ -1,4 +1,4 @@
-package de.iotus.cloud.api.database;
+package org.lotuscloud.api.database;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;

@@ -1,4 +1,4 @@
-package de.iotus.cloud.api.network;
+package org.lotuscloud.api.network;
 
 import java.io.Serializable;
 

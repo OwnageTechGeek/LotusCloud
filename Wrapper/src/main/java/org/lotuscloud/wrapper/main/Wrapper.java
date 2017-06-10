@@ -1,14 +1,14 @@
-package de.iotus.cloud.wrapper.main;
+package org.lotuscloud.wrapper.main;
 
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
-import de.iotus.cloud.api.console.ConsoleReader;
-import de.iotus.cloud.api.logging.LogLevel;
-import de.iotus.cloud.api.logging.Logger;
-import de.iotus.cloud.api.network.PacketClient;
-import de.iotus.cloud.api.network.PacketServer;
-import de.iotus.cloud.api.packet.RegisterPacket;
-import de.iotus.cloud.api.packet.RegisteredPacket;
+import org.lotuscloud.api.console.ConsoleReader;
+import org.lotuscloud.api.logging.LogLevel;
+import org.lotuscloud.api.logging.Logger;
+import org.lotuscloud.api.network.PacketClient;
+import org.lotuscloud.api.network.PacketServer;
+import org.lotuscloud.api.packet.RegisterPacket;
+import org.lotuscloud.api.packet.RegisteredPacket;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-## IotusCloud
+## LotusCloud
 
 Open Source Minecraft Cloud System
 

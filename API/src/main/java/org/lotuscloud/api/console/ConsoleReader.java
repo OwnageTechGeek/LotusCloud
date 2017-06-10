@@ -1,4 +1,4 @@
-package de.iotus.cloud.api.console;
+package org.lotuscloud.api.console;
 
 import java.util.HashMap;
 import java.util.Scanner;

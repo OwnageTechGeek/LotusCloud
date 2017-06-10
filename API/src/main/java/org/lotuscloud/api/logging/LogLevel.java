@@ -1,4 +1,4 @@
-package de.iotus.cloud.api.logging;
+package org.lotuscloud.api.logging;
 
 /**
  * Copyright (c) 2017 Lennart Heinrich

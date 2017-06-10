@@ -1,4 +1,4 @@
-package de.iotus.cloud.api.console;
+package org.lotuscloud.api.console;
 
 /**
  * Copyright (c) 2017 Lennart Heinrich

@@ -1,6 +1,6 @@
-package de.iotus.cloud.api.packet;
+package org.lotuscloud.api.packet;
 
-import de.iotus.cloud.api.network.Packet;
+import org.lotuscloud.api.network.Packet;
 
 /**
  * Copyright (c) 2017 Lennart Heinrich

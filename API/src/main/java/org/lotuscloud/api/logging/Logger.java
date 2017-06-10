@@ -1,4 +1,4 @@
-package de.iotus.cloud.api.logging;
+package org.lotuscloud.api.logging;
 
 import java.io.PrintStream;
 

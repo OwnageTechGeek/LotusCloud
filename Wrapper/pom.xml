@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.iotus</groupId>
-    <artifactId>cloud-wrapper</artifactId>
+    <groupId>org.lotuscloud</groupId>
+    <artifactId>wrapper</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <repositories>
@@ -43,7 +43,7 @@
                     <appendAssemblyId>false</appendAssemblyId>
                     <archive>
                         <manifest>
-                            <mainClass>de.iotus.cloud.wrapper.main.Wrapper</mainClass>
+                            <mainClass>org.lotuscloud.wrapper.main.Wrapper</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -53,8 +53,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>de.iotus</groupId>
-            <artifactId>cloud-api</artifactId>
+            <groupId>org.lotuscloud</groupId>
+            <artifactId>api</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>

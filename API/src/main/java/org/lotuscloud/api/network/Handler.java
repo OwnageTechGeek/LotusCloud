@@ -1,4 +1,4 @@
-package de.iotus.cloud.api.network;
+package org.lotuscloud.api.network;
 
 /**
  * Copyright (c) 2017 Lennart Heinrich
