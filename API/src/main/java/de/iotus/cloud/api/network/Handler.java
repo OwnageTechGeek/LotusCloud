@@ -5,5 +5,5 @@ package de.iotus.cloud.api.network;
  * www.lennarth.com
  */
 public abstract class Handler {
-    public abstract Packet handle(Packet packet);
+    public abstract Packet handle(Packet packet, String client);
 }

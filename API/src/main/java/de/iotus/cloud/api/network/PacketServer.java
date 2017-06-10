@@ -40,17 +40,17 @@ public class PacketServer {
                         Socket socket = serverSocket.accept();
                         executor.submit(() -> {
                             try {
+                                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+                                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                                Packet packet = (Packet) in.readObject();
                                 String client = socket.getInetAddress().getHostAddress();
-                                if (!acceptIP.contains(client)) {
+                                if (!acceptIP.contains(client) && !packet.getPacketName().equalsIgnoreCase("register")) {
                                     socket.close();
                                     System.out.println("unallowed request from " + client + " closed");
                                     return;
                                 }
-                                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-                                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-                                Packet packet = (Packet) in.readObject();
                                 if (handlers.containsKey(packet.getPacketName()))
-                                    out.writeObject(handlers.get(packet.getPacketName()).handle(packet));
+                                    out.writeObject(handlers.get(packet.getPacketName()).handle(packet, client));
                                 else
                                     out.writeObject(new ErrorPacket("handler not found"));
                                 out.flush();
@@ -101,5 +101,13 @@ public class PacketServer {
     public void removeIP(String ip) {
         if (acceptIP.contains(ip))
             acceptIP.remove(ip);
+    }
+
+    public boolean isAcceptedIP(String ip) {
+        return acceptIP.contains(ip);
+    }
+
+    public int getPort() {
+        return port;
     }
 }

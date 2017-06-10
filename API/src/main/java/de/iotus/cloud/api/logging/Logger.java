@@ -22,7 +22,7 @@ public class Logger {
     }
 
     public void log(String message) {
-        log(message, logLevel);
+        log(message, LogLevel.CRITICAL);
     }
 
     public void log(String message, LogLevel logLevel) {

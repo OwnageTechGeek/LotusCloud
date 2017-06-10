@@ -5,5 +5,10 @@
     "database": "test",
     "user": "test",
     "password": "test"
+  },
+  "wrapper": {
+    "port": 1250,
+    "master-host": "127.0.0.1",
+    "master-port": 1241
   }
 }
