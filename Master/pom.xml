@@ -12,6 +12,13 @@
         <module>../API</module>
     </modules>
 
+    <repositories>
+        <repository>
+            <id>public</id>
+            <url>https://mvn.lennarth.com/repository/public/</url>
+        </repository>
+    </repositories>
+
     <build>
         <plugins>
             <plugin>
