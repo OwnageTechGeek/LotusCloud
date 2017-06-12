@@ -2,15 +2,18 @@ package org.lotuscloud.master.main;
 
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
+import org.lotuscloud.api.console.ConsoleCommand;
 import org.lotuscloud.api.console.ConsoleReader;
 import org.lotuscloud.api.database.DatabaseManager;
 import org.lotuscloud.api.logging.LogLevel;
 import org.lotuscloud.api.logging.Logger;
 import org.lotuscloud.api.network.Handler;
 import org.lotuscloud.api.network.Packet;
+import org.lotuscloud.api.network.PacketClient;
 import org.lotuscloud.api.network.PacketServer;
 import org.lotuscloud.api.packet.RegisterPacket;
 import org.lotuscloud.api.packet.RegisteredPacket;
+import org.lotuscloud.api.packet.StartServerPacket;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,11 +57,17 @@ public class Master {
         server.bind();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> server.close()));
         registerHandler();
+        console.register("start", new ConsoleCommand() {
+            @Override
+            public void process(String command, String[] args) {
+                System.out.println(PacketClient.request("127.0.0.1", wrapper.get("127.0.0.1"), new StartServerPacket("test", "spigot-1.8.8.jar")));
+            }
+        });
         logger.log("Master erfolgreich gestartet");
     }
 
     public static void main(String[] args) throws IOException {
-        System.out.println("    ____      __             ________                __\n   /  _/___  / /___  _______/ ____/ /___  __  ______/ /\n   / // __ \\/ __/ / / / ___/ /   / / __ \\/ / / / __  / \n _/ // /_/ / /_/ /_/ (__  ) /___/ / /_/ / /_/ / /_/ /  \n/___/\\____/\\__/\\__,_/____/\\____/_/\\____/\\__,_/\\__,_/");
+        System.out.println("    __          __             ________                __\n   / /   ____  / /___  _______/ ____/ /___  __  ______/ /\n  / /   / __ \\/ __/ / / / ___/ /   / / __ \\/ / / / __  / \n / /___/ /_/ / /_/ /_/ (__  ) /___/ / /_/ / /_/ / /_/ /  \n/_____/\\____/\\__/\\__,_/____/\\____/_/\\____/\\__,_/\\__,_/");
         System.out.println("Master - Copyright (c) 2017 Lennart Heinrich");
         System.out.println("Lizenziert unter der Apache Lizenz, Version 2");
         if (!Files.exists(Paths.get("license-terms.txt")) || !new String(Files.readAllBytes(Paths.get("license-terms.txt"))).replace(" ", "").equalsIgnoreCase("accepted=true")) {

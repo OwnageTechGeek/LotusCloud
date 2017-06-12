@@ -9,6 +9,7 @@ import org.lotuscloud.api.network.PacketClient;
 import org.lotuscloud.api.network.PacketServer;
 import org.lotuscloud.api.packet.RegisterPacket;
 import org.lotuscloud.api.packet.RegisteredPacket;
+import org.lotuscloud.wrapper.handler.StartServerHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,6 +47,7 @@ public class Wrapper {
         server = new PacketServer(config.getInt("port", 1250));
         server.bind();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> server.close()));
+        server.registerHandler("startserver", new StartServerHandler());
         masterHost = config.getString("master-host", "127.0.0.1");
         masterPort = config.getInt("master-port", 1241);
         RegisteredPacket registeredPacket = (RegisteredPacket) PacketClient.request(masterHost, masterPort, new RegisterPacket(server.getPort()));
@@ -53,11 +55,12 @@ public class Wrapper {
             logger.log("Wrapper registriert", LogLevel.INFO);
         else
             logger.log("Wrapper konnte nicht registriert werden: " + registeredPacket.error);
+        server.acceptIP(masterHost);
         logger.log("Wrapper erfolgreich gestartet", LogLevel.INFO);
     }
 
     public static void main(String[] args) throws IOException {
-        System.out.println("    ____      __             ________                __\n   /  _/___  / /___  _______/ ____/ /___  __  ______/ /\n   / // __ \\/ __/ / / / ___/ /   / / __ \\/ / / / __  / \n _/ // /_/ / /_/ /_/ (__  ) /___/ / /_/ / /_/ / /_/ /  \n/___/\\____/\\__/\\__,_/____/\\____/_/\\____/\\__,_/\\__,_/");
+        System.out.println("    __          __             ________                __\n   / /   ____  / /___  _______/ ____/ /___  __  ______/ /\n  / /   / __ \\/ __/ / / / ___/ /   / / __ \\/ / / / __  / \n / /___/ /_/ / /_/ /_/ (__  ) /___/ / /_/ / /_/ / /_/ /  \n/_____/\\____/\\__/\\__,_/____/\\____/_/\\____/\\__,_/\\__,_/");
         System.out.println("Wrapper - Copyright (c) 2017 Lennart Heinrich");
         System.out.println("Lizenziert unter der Apache Lizenz, Version 2");
         if (!Files.exists(Paths.get("license-terms.txt")) || !new String(Files.readAllBytes(Paths.get("license-terms.txt"))).replace(" ", "").equalsIgnoreCase("accepted=true")) {
