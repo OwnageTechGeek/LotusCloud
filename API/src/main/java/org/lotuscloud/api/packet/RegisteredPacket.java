@@ -10,10 +10,12 @@ public class RegisteredPacket extends Packet {
 
     public boolean success;
     public String error;
+    public Object key;
 
-    public RegisteredPacket(boolean success, String error) {
+    public RegisteredPacket(boolean success, String error, Object key) {
         super("registered");
         this.success = success;
         this.error = error;
+        this.key = key;
     }
 }

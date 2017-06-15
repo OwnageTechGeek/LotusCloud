@@ -3,6 +3,7 @@ package org.lotuscloud.wrapper.main;
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
 import org.lotuscloud.api.console.ConsoleReader;
+import org.lotuscloud.api.crypt.Crypter;
 import org.lotuscloud.api.logging.LogLevel;
 import org.lotuscloud.api.logging.Logger;
 import org.lotuscloud.api.network.PacketClient;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.KeyPair;
 import java.util.Scanner;
 
 /**
@@ -29,11 +31,14 @@ public class Wrapper {
     public JsonObject config;
     public ConsoleReader console;
     public PacketServer server;
+    public PacketClient client;
     public String masterHost;
     public int masterPort;
+    public int bindPort;
 
     public Wrapper() {
         instance = this;
+
         try {
             File file = new File("config.json");
             if (!file.exists())
@@ -42,20 +47,33 @@ public class Wrapper {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+
         logger = new Logger(LogLevel.DEBUG);
         console = new ConsoleReader();
-        server = new PacketServer(config.getInt("port", 1250));
-        server.bind();
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> server.close()));
-        server.registerHandler("startserver", new StartServerHandler());
+
         masterHost = config.getString("master-host", "127.0.0.1");
         masterPort = config.getInt("master-port", 1241);
-        RegisteredPacket registeredPacket = (RegisteredPacket) PacketClient.request(masterHost, masterPort, new RegisterPacket(server.getPort()));
+
+        bindPort = config.getInt("port", 1250);
+
+        KeyPair keyPair = Crypter.generateKeyPair(2048);
+        client = new PacketClient(keyPair);
+
+        RegisteredPacket registeredPacket = (RegisteredPacket) client.registerWrapper(masterHost, masterPort, new RegisterPacket(bindPort, keyPair.getPublic()));
+
         if (registeredPacket.success)
             logger.log("Wrapper registriert", LogLevel.INFO);
         else
             logger.log("Wrapper konnte nicht registriert werden: " + registeredPacket.error);
+
+        server = new PacketServer(bindPort, client.key);
+        server.bind();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> server.close()));
+
+        server.registerHandler("startserver", new StartServerHandler());
         server.acceptIP(masterHost);
+
         logger.log("Wrapper erfolgreich gestartet", LogLevel.INFO);
     }
 

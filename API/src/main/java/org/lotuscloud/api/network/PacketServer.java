@@ -1,7 +1,10 @@
 package org.lotuscloud.api.network;
 
+import org.lotuscloud.api.crypt.Crypter;
 import org.lotuscloud.api.packet.ErrorPacket;
+import org.lotuscloud.api.packet.RegisterPacket;
 
+import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -18,6 +21,7 @@ import java.util.concurrent.Executors;
  */
 public class PacketServer {
 
+    public SecretKey key;
     private boolean closed = true;
     private int port;
     private ServerSocket serverSocket;
@@ -27,6 +31,12 @@ public class PacketServer {
 
     public PacketServer(int port) {
         this.port = port;
+        key = Crypter.generateKey(128);
+    }
+
+    public PacketServer(int port, SecretKey key) {
+        this.port = port;
+        this.key = key;
     }
 
     public void bind() {
@@ -42,23 +52,48 @@ public class PacketServer {
                             try {
                                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-                                Packet packet = (Packet) in.readObject();
+
+                                Object object = in.readObject();
+                                boolean isRegisterPacket = object instanceof RegisterPacket;
+
                                 String client = socket.getInetAddress().getHostAddress();
-                                if (!acceptIP.contains(client) && !packet.getPacketName().equalsIgnoreCase("register")) {
+                                if (!acceptIP.contains(client) && !isRegisterPacket) {
                                     socket.close();
                                     System.out.println("unallowed request from " + client + " closed");
                                     return;
                                 }
-                                if (handlers.containsKey(packet.getPacketName()))
-                                    out.writeObject(handlers.get(packet.getPacketName()).handle(packet, client));
-                                else
-                                    out.writeObject(new ErrorPacket("handler not found"));
+                                Packet packet;
+
+                                if (isRegisterPacket)
+                                    packet = (Packet) object;
+                                else {
+                                    byte[] decrypted = Crypter.decrypt(key, (byte[]) object, "AES");
+                                    packet = (Packet) Crypter.toObject(decrypted);
+                                }
+
+                                if (handlers.containsKey(packet.getPacketName())) {
+                                    Packet response = handlers.get(packet.getPacketName()).handle(packet, client);
+
+                                    if (isRegisterPacket)
+                                        out.writeObject(response);
+                                    else
+                                        out.writeObject(Crypter.encrypt(key, Crypter.toByteArray(response), "AES"));
+                                } else
+                                    out.writeObject(Crypter.encrypt(key, Crypter.toByteArray(new ErrorPacket("handler not found")), "AES"));
+
                                 out.flush();
                                 in.close();
                                 out.close();
+
                                 socket.close();
                             } catch (Exception ex) {
                                 ex.printStackTrace();
+                                if (!socket.isClosed())
+                                    try {
+                                        socket.close();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                             }
                         });
                     } catch (IOException ex) {

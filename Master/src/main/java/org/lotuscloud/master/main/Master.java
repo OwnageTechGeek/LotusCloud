@@ -4,6 +4,7 @@ import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
 import org.lotuscloud.api.console.ConsoleCommand;
 import org.lotuscloud.api.console.ConsoleReader;
+import org.lotuscloud.api.crypt.Crypter;
 import org.lotuscloud.api.database.DatabaseManager;
 import org.lotuscloud.api.logging.LogLevel;
 import org.lotuscloud.api.logging.Logger;
@@ -35,10 +36,12 @@ public class Master {
     public JsonObject config;
     public ConsoleReader console;
     public PacketServer server;
+    public PacketClient client;
     public HashMap<String, Integer> wrapper = new HashMap<>();
 
     public Master() {
         instance = this;
+
         try {
             File file = new File("config.json");
             if (!file.exists())
@@ -47,22 +50,32 @@ public class Master {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+
         logger = new Logger(LogLevel.DEBUG);
+
         JsonObject mongoConfig = config.get("mongodb").asObject();
         logger.log("Verbinde zur Datenbank", LogLevel.INFO);
         databaseManager = new DatabaseManager(mongoConfig.getString("host", "127.0.0.1"), mongoConfig.getInt("port", 27017), mongoConfig.getString("database", ""), mongoConfig.getString("user", ""), mongoConfig.getString("password", ""));
         logger.log("Mit der Datenbank verbunden", LogLevel.INFO);
+
         console = new ConsoleReader();
+
         server = new PacketServer(1241);
         server.bind();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> server.close()));
+
         registerHandler();
+
+        client = new PacketClient(null);
+        client.key = server.key;
+
         console.register("start", new ConsoleCommand() {
             @Override
             public void process(String command, String[] args) {
-                System.out.println(PacketClient.request("127.0.0.1", wrapper.get("127.0.0.1"), new StartServerPacket("test", "spigot-1.8.8.jar")));
+                System.out.println(client.request("127.0.0.1", wrapper.get("127.0.0.1"), new StartServerPacket("test", "spigot-1.8.8.jar")));
             }
         });
+
         logger.log("Master erfolgreich gestartet");
     }
 
@@ -90,12 +103,12 @@ public class Master {
     private void registerHandler() {
         server.registerHandler("register", new Handler() {
             @Override
-            public Packet handle(Packet packet, String client) {
+            public Packet handle(Packet packet, String client) throws IOException {
                 RegisterPacket registerPacket = (RegisterPacket) packet;
                 server.acceptIP(client);
                 wrapper.put(client, registerPacket.port);
                 logger.log("Neuer Wrapper registriert: " + client + " an Port " + registerPacket.port, LogLevel.WARNING);
-                return new RegisteredPacket(true, null);
+                return new RegisteredPacket(true, null, Crypter.encrypt(registerPacket.key, Crypter.toByteArray(server.key), "RSA"));
             }
         });
     }
