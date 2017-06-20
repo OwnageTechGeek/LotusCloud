@@ -22,7 +22,6 @@ import java.util.concurrent.Executors;
 public class PacketServer {
 
     public SecretKey key;
-    private boolean closed = true;
     private int port;
     private ServerSocket serverSocket;
     private ExecutorService executor = Executors.newCachedThreadPool();
@@ -43,11 +42,12 @@ public class PacketServer {
         close();
         try {
             serverSocket = new ServerSocket(port);
-            closed = false;
+
             new Thread(() -> {
-                while (!closed) {
+                while (serverSocket != null && !serverSocket.isClosed()) {
                     try {
                         Socket socket = serverSocket.accept();
+
                         executor.submit(() -> {
                             try {
                                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
@@ -97,7 +97,6 @@ public class PacketServer {
                             }
                         });
                     } catch (IOException ex) {
-                        ex.printStackTrace();
                     }
                 }
             }).start();
@@ -114,7 +113,6 @@ public class PacketServer {
                 ex.printStackTrace();
             }
             serverSocket = null;
-            closed = true;
         }
     }
 

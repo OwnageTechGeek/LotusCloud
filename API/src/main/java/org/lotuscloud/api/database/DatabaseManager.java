@@ -18,8 +18,9 @@ public class DatabaseManager {
     public DatabaseManager(String host, int port, String database, String user, String password) {
         java.util.logging.Logger.getLogger("org.mongodb.driver").setLevel(Level.SEVERE);
         MongoClientURI uri = new MongoClientURI("mongodb://" + user + ":" + password + "@" + host + ":" + port + "/?authSource=" + database);
-        this.client = new MongoClient(uri);
+        client = new MongoClient(uri);
         this.database = getClient().getDatabase(database);
+        client.getAddress();
     }
 
     public MongoClient getClient() {

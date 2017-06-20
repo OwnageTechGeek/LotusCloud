@@ -15,6 +15,8 @@ import org.lotuscloud.api.network.PacketServer;
 import org.lotuscloud.api.packet.RegisterPacket;
 import org.lotuscloud.api.packet.RegisteredPacket;
 import org.lotuscloud.api.packet.StartServerPacket;
+import org.lotuscloud.master.web.WebServer;
+import org.lotuscloud.master.webhandler.MainWebHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +40,7 @@ public class Master {
     public PacketServer server;
     public PacketClient client;
     public HashMap<String, Integer> wrapper = new HashMap<>();
+    public WebServer webServer;
 
     public Master() {
         instance = this;
@@ -54,6 +57,7 @@ public class Master {
         logger = new Logger(LogLevel.DEBUG);
 
         JsonObject mongoConfig = config.get("mongodb").asObject();
+
         logger.log("Verbinde zur Datenbank", LogLevel.INFO);
         databaseManager = new DatabaseManager(mongoConfig.getString("host", "127.0.0.1"), mongoConfig.getInt("port", 27017), mongoConfig.getString("database", ""), mongoConfig.getString("user", ""), mongoConfig.getString("password", ""));
         logger.log("Mit der Datenbank verbunden", LogLevel.INFO);
@@ -62,7 +66,13 @@ public class Master {
 
         server = new PacketServer(1241);
         server.bind();
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> server.close()));
+
+        webServer = new WebServer(1735);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            server.close();
+            webServer.close();
+        }));
 
         registerHandler();
 
@@ -111,5 +121,6 @@ public class Master {
                 return new RegisteredPacket(true, null, Crypter.encrypt(registerPacket.key, Crypter.toByteArray(server.key), "RSA"));
             }
         });
+        webServer.registerHandler("", new MainWebHandler());
     }
 }
