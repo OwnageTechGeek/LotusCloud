@@ -4,10 +4,8 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.io.*;
-import java.security.Key;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
+import java.nio.charset.StandardCharsets;
+import java.security.*;
 
 /**
  * Copyright (c) 2017 Lennart Heinrich
@@ -70,5 +68,21 @@ public class Crypter {
         ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
         ObjectInput in = new ObjectInputStream(bis);
         return in.readObject();
+    }
+
+    public static String hash(String algorithm, String value) {
+        try {
+            MessageDigest md = MessageDigest.getInstance(algorithm);
+
+            md.update(value.getBytes(StandardCharsets.UTF_8));
+
+            byte[] digest = md.digest();
+
+            return String.format("%064x", new java.math.BigInteger(1, digest));
+        } catch (NoSuchAlgorithmException ex) {
+            ex.printStackTrace();
+
+            return null;
+        }
     }
 }

@@ -29,7 +29,6 @@ public class WebServer {
 
                         executor.submit(() -> {
                             try {
-
                                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                                 BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
@@ -46,9 +45,22 @@ public class WebServer {
 
                                 String response;
 
-                                if (handlers.containsKey(handlerName))
-                                    response = handlers.get(handlerName).process(splittedRequest[1].substring(1));
-                                else
+                                if (handlers.containsKey(handlerName)) {
+                                    String preRawRequest = splittedRequest[1];
+                                    String rawRequest = preRawRequest.substring(preRawRequest.length() > 2 ? 2 : 1);
+                                    String[] splittedRawRequest = rawRequest.split("&");
+
+                                    HashMap<String, String> requestMap = new HashMap<>();
+
+                                    for (String rawSplittedRawRequest : splittedRawRequest) {
+                                        String[] splittedSplittedRawRequest = rawSplittedRawRequest.split("=", 2);
+
+                                        if (splittedSplittedRawRequest.length >= 2)
+                                            requestMap.put(splittedSplittedRawRequest[0], splittedSplittedRawRequest[1]);
+                                    }
+
+                                    response = handlers.get(handlerName).process(requestMap);
+                                } else
                                     response = "<!DOCTYPE html><html><body>Der WebHandler '" + handlerName + "' wurde nicht gefunden</body></html>";
 
                                 out.write("Content-Length: " + response.length() + "\r\n");
@@ -61,6 +73,12 @@ public class WebServer {
                                 out.close();
 
                                 socket.close();
+                            } catch (NullPointerException ex) {
+                                try {
+                                    socket.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                                 if (!socket.isClosed())
