@@ -6,3 +6,4 @@ Open Source Minecraft Cloud System
 - Issue erstellen
 - Discord: https://discord.gg/dYCJt4Z
 - E-Mail: craftphd@gmail.com
+- Forum: https://www.lotuscloud.org
