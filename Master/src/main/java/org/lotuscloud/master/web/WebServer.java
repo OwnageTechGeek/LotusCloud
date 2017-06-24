@@ -1,5 +1,7 @@
 package org.lotuscloud.master.web;
 
+import org.lotuscloud.master.webhandler.HTML;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -13,10 +15,11 @@ import java.util.concurrent.Executors;
  */
 public class WebServer {
 
+    public final HashMap<String, String> user = new HashMap<String, String>();
+    private final ExecutorService executor = Executors.newCachedThreadPool();
+    private final HashMap<String, WebHandler> handlers = new HashMap<>();
     private int port;
     private ServerSocket serverSocket;
-    private ExecutorService executor = Executors.newCachedThreadPool();
-    private HashMap<String, WebHandler> handlers = new HashMap<>();
 
     public WebServer(int port) {
         this.port = port;
@@ -37,15 +40,14 @@ public class WebServer {
                                 while (in.ready())
                                     request += System.lineSeparator() + in.readLine();
 
-                                out.write("HTTP/1.0 200 OK\r\n");
-                                out.write("Content-Type: text/html\r\n");
-
                                 String[] splittedRequest = request.split(" ");
                                 String handlerName = splittedRequest[1].split("\\?")[0].substring(1);
 
                                 String response;
 
-                                if (handlers.containsKey(handlerName)) {
+                                if (!handlerName.equalsIgnoreCase("") && !handlerName.equalsIgnoreCase("style.css") && !user.containsKey(socket.getInetAddress().getHostAddress()))
+                                    response = "<h1>Not authenticated</h1>";
+                                else if (handlers.containsKey(handlerName)) {
                                     String preRawRequest = splittedRequest[1];
                                     String rawRequest = preRawRequest.substring(preRawRequest.length() > 2 ? 2 : 1);
                                     String[] splittedRawRequest = rawRequest.split("&");
@@ -59,10 +61,17 @@ public class WebServer {
                                             requestMap.put(splittedSplittedRawRequest[0], splittedSplittedRawRequest[1]);
                                     }
 
-                                    response = handlers.get(handlerName).process(requestMap);
+                                    response = handlers.get(handlerName).process(requestMap, socket.getInetAddress().getHostAddress());
                                 } else
-                                    response = "<!DOCTYPE html><html><body>Der WebHandler '" + handlerName + "' wurde nicht gefunden</body></html>";
+                                    response = "<p>Der WebHandler '" + handlerName + "' wurde nicht gefunden</p>";
 
+                                String[] preContent = handlerName.split("\\.");
+                                String content = !handlerName.contains(".") ? "html" : preContent[preContent.length - 1];
+
+                                response = content.equalsIgnoreCase("html") ? HTML.head + response + HTML.footer : response;
+
+                                out.write("HTTP/1.0 200 OK\r\n");
+                                out.write("Content-Type: text/" + content + "; charset=utf-8\r\n");
                                 out.write("Content-Length: " + response.length() + "\r\n");
                                 out.write("\r\n");
 

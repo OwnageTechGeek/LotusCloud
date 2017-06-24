@@ -7,5 +7,6 @@ import java.util.HashMap;
  * www.lennarth.com
  */
 public abstract class WebHandler {
-    public abstract String process(HashMap<String, String> request);
+
+    public abstract String process(HashMap<String, String> request, String ip);
 }

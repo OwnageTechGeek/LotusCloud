@@ -16,7 +16,9 @@ import org.lotuscloud.api.packet.RegisterPacket;
 import org.lotuscloud.api.packet.RegisteredPacket;
 import org.lotuscloud.api.packet.StartServerPacket;
 import org.lotuscloud.master.web.WebServer;
+import org.lotuscloud.master.webhandler.Dashboard;
 import org.lotuscloud.master.webhandler.MainWebHandler;
+import org.lotuscloud.master.webhandler.Style;
 
 import java.io.File;
 import java.io.IOException;
@@ -125,6 +127,9 @@ public class Master {
                 return new RegisteredPacket(true, null, Crypter.encrypt(registerPacket.key, Crypter.toByteArray(server.key), "RSA"));
             }
         });
+
+        webServer.registerHandler("style.css", new Style());
         webServer.registerHandler("", new MainWebHandler());
+        webServer.registerHandler("dashboard", new Dashboard());
     }
 }
