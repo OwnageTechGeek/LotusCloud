@@ -17,6 +17,7 @@ import org.lotuscloud.api.packet.RegisteredPacket;
 import org.lotuscloud.api.packet.StartServerPacket;
 import org.lotuscloud.master.web.WebServer;
 import org.lotuscloud.master.webhandler.Dashboard;
+import org.lotuscloud.master.webhandler.Groups;
 import org.lotuscloud.master.webhandler.MainWebHandler;
 import org.lotuscloud.master.webhandler.Style;
 
@@ -128,8 +129,11 @@ public class Master {
             }
         });
 
+        MainWebHandler main = new MainWebHandler();
         webServer.registerHandler("style.css", new Style());
-        webServer.registerHandler("", new MainWebHandler());
+        webServer.registerHandler("", main);
+        webServer.registerHandler("login", main);
         webServer.registerHandler("dashboard", new Dashboard());
+        webServer.registerHandler("groups", new Groups());
     }
 }

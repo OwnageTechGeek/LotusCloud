@@ -31,13 +31,16 @@ public class MainWebHandler extends WebHandler {
                 return "<h3>Benutzername oder Passwort nicht gefunden</h3>";
             else {
                 Master.instance.webServer.user.put(ip, ((Document) iterable.first()).getString("name"));
-                return "<meta http-equiv=\"refresh\" content=\"0; url=dashboard\" />";
+                return "<meta http-equiv=\"refresh\" content=\"0; url=/dashboard\" />";
             }
-        }
+        } else if (Master.instance.webServer.user.containsKey(ip))
+            return "<meta http-equiv=\"refresh\" content=\"0; url=/dashboard\" />";
         return "<form method='get'>" +
                 "<div class='login'>" +
+                "<h3>Anmelden</h3>" +
                 "<input placeholder='Benutzername' name='name' required>" +
                 "<input placeholder='Passwort' name='password' required>" +
+                "<br><br>" +
                 "<button type='submit'>Login</button>" +
                 "</div>" +
                 "</form>";

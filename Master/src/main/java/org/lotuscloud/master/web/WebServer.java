@@ -45,11 +45,11 @@ public class WebServer {
 
                                 String response;
 
-                                if (!handlerName.equalsIgnoreCase("") && !handlerName.equalsIgnoreCase("style.css") && !user.containsKey(socket.getInetAddress().getHostAddress()))
-                                    response = "<h1>Not authenticated</h1>";
+                                if (!handlerName.equalsIgnoreCase("") && !handlerName.equalsIgnoreCase("login") && !handlerName.equalsIgnoreCase("style.css") && !user.containsKey(socket.getInetAddress().getHostAddress()))
+                                    response = "<meta http-equiv=\"refresh\" content=\"0; url=/login\" />";
                                 else if (handlers.containsKey(handlerName)) {
-                                    String preRawRequest = splittedRequest[1];
-                                    String rawRequest = preRawRequest.substring(preRawRequest.length() > 2 ? 2 : 1);
+                                    String[] preRawRequest = splittedRequest[1].split("\\?", 2);
+                                    String rawRequest = preRawRequest.length > 1 ? preRawRequest[1] : "";
                                     String[] splittedRawRequest = rawRequest.split("&");
 
                                     HashMap<String, String> requestMap = new HashMap<>();
