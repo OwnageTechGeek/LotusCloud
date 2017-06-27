@@ -12,46 +12,38 @@ public class Builder {
 
     public static void main(String[] args) throws InterruptedException, IOException {
         System.out.println("Starte LotusCloud Builder...\nAbbrechen mit STRG + C");
+
         Thread.sleep(3000);
 
-        ProcessBuilder gitClone = new ProcessBuilder("git", "clone", "https://github.com/NexusByte/LotusCloud.git");
-        Process gitCloneProcess = gitClone.start();
+        System.out.println("Klone Git Repository https://github.com/NexusByte/LotusCloud.git");
 
-        Scanner scanner1 = new Scanner(gitCloneProcess.getInputStream());
-        while (gitCloneProcess.isAlive())
-            if (scanner1.hasNextLine())
-                System.out.println(scanner1.nextLine());
+        process("", "git", "clone", "https://github.com/NexusByte/LotusCloud.git");
 
-        ProcessBuilder apiInstall = new ProcessBuilder("mvn", "clean", "install");
-        apiInstall.directory(new File("LotusCloud/API"));
-        Process apiInstallProcess = apiInstall.start();
+        System.out.println("Git Repository geklont");
 
-        Scanner scanner2 = new Scanner(apiInstallProcess.getInputStream());
-        while (apiInstallProcess.isAlive())
-            if (scanner2.hasNextLine())
-                System.out.println(scanner2.nextLine());
+        process("LotusCloud/API", "mvn", "clean", "install");
 
-        ProcessBuilder masterPackage = new ProcessBuilder("mvn", "clean", "package");
-        masterPackage.directory(new File("LotusCloud/Master"));
-        Process masterPackageProcess = masterPackage.start();
+        process("LotusCloud/Master", "mvn", "clean", "package");
 
-        Scanner scanner3 = new Scanner(masterPackageProcess.getInputStream());
-        while (masterPackageProcess.isAlive())
-            if (scanner3.hasNextLine())
-                System.out.println(scanner3.nextLine());
-
-        ProcessBuilder wrapperPackage = new ProcessBuilder("mvn", "clean", "package");
-        wrapperPackage.directory(new File("LotusCloud/Wrapper"));
-        Process wrapperPackageProcess = wrapperPackage.start();
-
-        Scanner scanner4 = new Scanner(wrapperPackageProcess.getInputStream());
-        while (wrapperPackageProcess.isAlive())
-            if (scanner4.hasNextLine())
-                System.out.println(scanner4.nextLine());
+        process("LotusCloud/Wrapper", "mvn", "clean", "package");
 
         File file = new File("");
+
         System.out.println("\n\n\n\n\n\n\n\n\n\nMaster Jar: " + file.getAbsolutePath() + "/LotusCloud/Master/target\nWrapper Jar: " + file.getAbsolutePath() + "/LotusCloud/Wrapper/target");
         System.out.println("\nFertig!");
+
         Thread.sleep(1000);
+    }
+
+    private static void process(String dir, String... command) throws IOException {
+        ProcessBuilder processBuilder = new ProcessBuilder(command).directory(new File(dir).getAbsoluteFile());
+
+        Process process = processBuilder.start();
+
+        Scanner scanner = new Scanner(process.getInputStream());
+
+        while (process.isAlive())
+            if (scanner.hasNextLine())
+                System.out.println(scanner.nextLine());
     }
 }
