@@ -10,5 +10,6 @@
     "port": 1250,
     "master-host": "127.0.0.1",
     "master-port": 1241
-  }
+  },
+  "language": "en"
 }

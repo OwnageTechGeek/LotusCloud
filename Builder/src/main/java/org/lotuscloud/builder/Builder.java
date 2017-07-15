@@ -11,15 +11,15 @@ import java.util.Scanner;
 public class Builder {
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        System.out.println("Starte LotusCloud Builder...\nAbbrechen mit STRG + C");
+        System.out.println("Starting LotusCloud Builder...\nExit with CTRL + C");
 
         Thread.sleep(3000);
 
-        System.out.println("Klone Git Repository https://github.com/NexusByte/LotusCloud.git");
+        System.out.println("Cloning Git Repository https://github.com/NexusByte/LotusCloud.git");
 
         process("", "git", "clone", "https://github.com/NexusByte/LotusCloud.git");
 
-        System.out.println("Git Repository geklont");
+        System.out.println("Git Repository cloned");
 
         process("LotusCloud/API", "mvn", "clean", "install");
 
@@ -30,7 +30,7 @@ public class Builder {
         File file = new File("");
 
         System.out.println("\n\n\n\n\n\n\n\n\n\nMaster Jar: " + file.getAbsolutePath() + "/LotusCloud/Master/target\nWrapper Jar: " + file.getAbsolutePath() + "/LotusCloud/Wrapper/target");
-        System.out.println("\nFertig!");
+        System.out.println("\nFinished!");
 
         Thread.sleep(1000);
     }
