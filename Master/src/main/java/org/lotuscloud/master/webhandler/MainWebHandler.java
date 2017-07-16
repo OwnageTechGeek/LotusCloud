@@ -28,7 +28,7 @@ public class MainWebHandler extends WebHandler {
             ref.put("password", DBTools.noCase(Crypter.hash("SHA-512", request.get("password"))));
             FindIterable iterable = collection.find((Bson) ref);
             if (iterable.first() == null)
-                return "<h3>Benutzername oder Passwort nicht gefunden</h3>";
+                return "<h3>" + Master.instance.language.get("wrong_login") + "</h3>";
             else {
                 Master.instance.webServer.user.put(ip, ((Document) iterable.first()).getString("name"));
                 return "<meta http-equiv=\"refresh\" content=\"0; url=/dashboard\" />";
@@ -37,11 +37,11 @@ public class MainWebHandler extends WebHandler {
             return "<meta http-equiv=\"refresh\" content=\"0; url=/dashboard\" />";
         return "<form method='get'>" +
                 "<div class='login'>" +
-                "<h3>Anmelden</h3>" +
-                "<input placeholder='Benutzername' name='name' required>" +
-                "<input placeholder='Passwort' name='password' required>" +
+                "<h3>" + Master.instance.language.get("login") + "</h3>" +
+                "<input placeholder='" + Master.instance.language.get("username") + "' name='name' required>" +
+                "<input placeholder='" + Master.instance.language.get("password") + "' name='password' required>" +
                 "<br><br>" +
-                "<button type='submit'>Login</button>" +
+                "<button type='submit'>" + Master.instance.language.get("login") + "</button>" +
                 "</div>" +
                 "</form>";
     }

@@ -11,5 +11,9 @@
   "welcome_back": "Welcome back, $username!",
   "edit": "Edit",
   "template_not_found": "Template not found",
-  "copy_from_to": "Copying from $source to $destination"
+  "copy_from_to": "Copying from $source to $destination",
+  "wrong_login": "Your username or password is wrong",
+  "login": "Login",
+  "username": "Username",
+  "password": "Password"
 }
