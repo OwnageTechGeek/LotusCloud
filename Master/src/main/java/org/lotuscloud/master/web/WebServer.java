@@ -1,5 +1,6 @@
 package org.lotuscloud.master.web;
 
+import org.lotuscloud.master.main.Master;
 import org.lotuscloud.master.webhandler.HTML;
 
 import java.io.*;
@@ -63,7 +64,7 @@ public class WebServer {
 
                                     response = handlers.get(handlerName).process(requestMap, socket.getInetAddress().getHostAddress());
                                 } else
-                                    response = "<p>Der WebHandler '" + handlerName + "' wurde nicht gefunden</p>";
+                                    response = "<p>" + Master.instance.language.get("webhandler_not_found").replace("$handlername", handlerName) + "</p>";
 
                                 String[] preContent = handlerName.split("\\.");
                                 String content = !handlerName.contains(".") ? "html" : preContent[preContent.length - 1];

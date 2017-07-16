@@ -15,10 +15,10 @@ public class Groups extends WebHandler {
     public String process(HashMap<String, String> request, String ip) {
         String user = Master.instance.webServer.user.get(ip);
         return "<div class='box'>" +
-                "<h2>Gruppen</h2>" +
+                "<h2>" + Master.instance.language.get("groups") + "</h2>" +
                 "<div class='group'>" +
                 "<p>Test</p>" +
-                "<button formaction='groups?edit=1'>Bearbeiten</button>" +
+                "<button formaction='groups?edit=1'>" + Master.instance.language.get("edit") + "</button>" +
                 "</div>" +
                 "</div>";
     }

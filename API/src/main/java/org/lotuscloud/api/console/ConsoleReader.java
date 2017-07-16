@@ -27,7 +27,7 @@ public class ConsoleReader {
                     if (commands.containsKey(command))
                         commands.get(command).process(command, (args.equals("") ? new String[]{} : args.split(" ")));
                     else
-                        System.out.println("Command nicht gefunden");
+                        System.out.println("Not found");
                 }
             }
         }).start();

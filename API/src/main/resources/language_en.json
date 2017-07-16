@@ -1,0 +1,15 @@
+{
+  "connecting_to_db": "Connecting to database...",
+  "connected_to_db": "Connected to database",
+  "master_started": "Master successfully started",
+  "new_wrapper": "New Wrapper registered at $client on port $port",
+  "wrapper_registered": "Wrapper registered",
+  "wrapper_register_fal": "Failed to register the Wrapper. Error:\n$error",
+  "wrapper_started": "Wrapper successfully started",
+  "webhandler_not_found": "Web Handler '$handlername' not found",
+  "groups": "Groups",
+  "welcome_back": "Welcome back, $username!",
+  "edit": "Edit",
+  "template_not_found": "Template not found",
+  "copy_from_to": "Copying from $source to $destination"
+}

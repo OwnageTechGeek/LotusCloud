@@ -28,7 +28,7 @@ public class StartServerHandler extends Handler {
         File templateDir = new File("templates/" + startServerPacket.getTemplate());
 
         if (!templateDir.exists())
-            return new ErrorPacket("Template nicht gefunden");
+            return new ErrorPacket(Wrapper.instance.language.get("template_not_found"));
 
         File tempDir = new File("temp");
         if (!tempDir.exists())
@@ -38,7 +38,7 @@ public class StartServerHandler extends Handler {
         for (int i = 1; true; i++) {
             if ((dir = new File("temp/" + startServerPacket.getTemplate() + i)).exists())
                 continue;
-            Wrapper.instance.logger.log("Kopiere " + templateDir.getPath() + " nach " + dir.getPath(), LogLevel.DEBUG);
+            Wrapper.instance.logger.log(Wrapper.instance.language.get("copy_from_to").replace("$source", templateDir.getPath()).replace("$destination", dir.getPath()), LogLevel.DEBUG);
             break;
         }
 

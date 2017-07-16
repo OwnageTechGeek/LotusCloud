@@ -2,6 +2,8 @@ package org.lotuscloud.master.main;
 
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
+import com.lennarth.jxutils.JsonLanguage;
+import com.lennarth.jxutils.Language;
 import org.lotuscloud.api.console.ConsoleCommand;
 import org.lotuscloud.api.console.ConsoleReader;
 import org.lotuscloud.api.crypt.Crypter;
@@ -21,8 +23,7 @@ import org.lotuscloud.master.webhandler.Groups;
 import org.lotuscloud.master.webhandler.MainWebHandler;
 import org.lotuscloud.master.webhandler.Style;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -44,6 +45,7 @@ public class Master {
     public PacketClient client;
     public HashMap<String, Integer> wrapper = new HashMap<>();
     public WebServer webServer;
+    public Language language;
 
     public Master() {
         instance = this;
@@ -57,13 +59,15 @@ public class Master {
             ex.printStackTrace();
         }
 
+        loadLanguageFile();
+
         logger = new Logger(LogLevel.DEBUG);
 
         JsonObject mongoConfig = config.get("mongodb").asObject();
 
-        logger.log("Verbinde zur Datenbank", LogLevel.INFO);
+        logger.log(language.get("connecting_to_db"), LogLevel.INFO);
         databaseManager = new DatabaseManager(mongoConfig.getString("host", "127.0.0.1"), mongoConfig.getInt("port", 27017), mongoConfig.getString("database", ""), mongoConfig.getString("user", ""), mongoConfig.getString("password", ""));
-        logger.log("Mit der Datenbank verbunden", LogLevel.INFO);
+        logger.log(language.get("connected_to_db"), LogLevel.INFO);
 
         console = new ConsoleReader();
 
@@ -89,32 +93,71 @@ public class Master {
             }
         });
 
-        logger.log("Master erfolgreich gestartet");
+        logger.log(language.get("master_started"));
     }
 
     public static void main(String[] args) throws IOException {
         System.out.println("    __          __             ________                __\n   / /   ____  / /___  _______/ ____/ /___  __  ______/ /\n  / /   / __ \\/ __/ / / / ___/ /   / / __ \\/ / / / __  / \n / /___/ /_/ / /_/ /_/ (__  ) /___/ / /_/ / /_/ / /_/ /  \n/_____/\\____/\\__/\\__,_/____/\\____/_/\\____/\\__,_/\\__,_/");
         System.out.println("Master - Copyright (c) 2017 Lennart Heinrich");
-        System.out.println("Lizenziert unter der Apache Lizenz, Version 2");
+        System.out.println("Licensed under the Apache License, Version 2");
 
         if (!Files.exists(Paths.get("license-terms.txt")) || !new String(Files.readAllBytes(Paths.get("license-terms.txt"))).replace(" ", "").equalsIgnoreCase("accepted=true")) {
-            System.out.print("Akzeptierst du die Bedingungen? [j/N]: ");
+            System.out.print("Do you accept the license terms? [y/N]: ");
 
-            if (new Scanner(System.in).nextLine().equalsIgnoreCase("j")) {
+            if (new Scanner(System.in).nextLine().equalsIgnoreCase("y")) {
                 try {
                     Files.write(Paths.get("license-terms.txt"), "accepted=true".getBytes());
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
             } else {
-                System.out.println("Stoppe Master...");
+                System.out.println("Stopping Master...");
                 System.exit(0);
             }
         }
 
-        System.out.println("Starte Master...");
+        System.out.println("Starting Master...");
 
         new Master();
+    }
+
+    private void loadLanguageFile() {
+        String resourceName = "/language_" + config.getString("language", "en") + ".json";
+
+        InputStream stream = null;
+        OutputStream resStreamOut = null;
+
+        String jarFolder;
+
+        try {
+            jarFolder = new File(Master.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParentFile().getPath().replace('\\', '/');
+
+            stream = Master.class.getResourceAsStream(resourceName);
+
+            if (stream == null) {
+                throw new Exception("Cannot get resource \"" + resourceName + "\" from Jar file.");
+            }
+
+            int readBytes;
+            byte[] buffer = new byte[4096];
+
+            resStreamOut = new FileOutputStream(jarFolder + resourceName);
+
+            while ((readBytes = stream.read(buffer)) > 0) {
+                resStreamOut.write(buffer, 0, readBytes);
+            }
+
+            JsonLanguage jsonLanguage = new JsonLanguage(new String(Files.readAllBytes(new File(jarFolder, resourceName).toPath()), StandardCharsets.UTF_8));
+            language = new Language(jsonLanguage);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                stream.close();
+                resStreamOut.close();
+            } catch (Exception ex) {
+            }
+        }
     }
 
     private void registerHandler() {
@@ -124,7 +167,7 @@ public class Master {
                 RegisterPacket registerPacket = (RegisterPacket) packet;
                 server.acceptIP(client);
                 wrapper.put(client, registerPacket.port);
-                logger.log("Neuer Wrapper registriert: " + client + " an Port " + registerPacket.port, LogLevel.WARNING);
+                logger.log(language.get("new_wrapper").replace("$client", client).replace("$port", String.valueOf(registerPacket.port)), LogLevel.WARNING);
                 return new RegisteredPacket(true, null, Crypter.encrypt(registerPacket.key, Crypter.toByteArray(server.key), "RSA"));
             }
         });
