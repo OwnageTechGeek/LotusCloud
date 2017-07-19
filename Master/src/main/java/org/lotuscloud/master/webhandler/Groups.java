@@ -1,5 +1,8 @@
 package org.lotuscloud.master.webhandler;
 
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import org.bson.Document;
 import org.lotuscloud.master.main.Master;
 import org.lotuscloud.master.web.WebHandler;
 
@@ -14,12 +17,14 @@ public class Groups extends WebHandler {
     @Override
     public String process(HashMap<String, String> request, String ip) {
         String user = Master.instance.webServer.user.get(ip);
-        return "<div class='box'>" +
-                "<h2>" + Master.instance.language.get("groups") + "</h2>" +
-                "<div class='group'>" +
-                "<p>Test</p>" +
-                "<button>" + Master.instance.language.get("edit") + "</button>" +
-                "</div>" +
-                "</div>";
+        MongoCollection col = Master.instance.databaseManager.getDatabase().getCollection("groups");
+        FindIterable<Document> find = col.find();
+        StringBuilder builder = new StringBuilder();
+        for (Document doc : find) {
+            String name = doc.getString("name");
+            if (name != null && !name.replace(" ", "").equalsIgnoreCase(""))
+                builder.append("<div class='group'><p>" + doc.getString("name") + "</p><a href='?edit=" + doc.getString("name") + "'><button>" + Master.instance.language.get("edit") + "</button></a></div>");
+        }
+        return "<div class='box'><h2>" + Master.instance.language.get("groups") + "</h2>" + builder.toString() + "</div>";
     }
 }

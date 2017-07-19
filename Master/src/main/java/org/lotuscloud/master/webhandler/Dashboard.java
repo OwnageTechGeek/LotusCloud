@@ -16,8 +16,6 @@ public class Dashboard extends WebHandler {
         String user = Master.instance.webServer.user.get(ip);
         return "<div class='box'>" +
                 "<h2>" + Master.instance.language.get("welcome_back").replace("$username", user) + "</h2>" +
-                "<br>" +
-                "<a href='groups'>" + Master.instance.language.get("groups") + "</a>" +
                 "</div>";
     }
 }
