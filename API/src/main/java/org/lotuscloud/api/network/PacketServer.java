@@ -43,7 +43,7 @@ public class PacketServer {
         try {
             serverSocket = new ServerSocket(port);
 
-            new Thread(() -> {
+            Thread thread = new Thread(() -> {
                 while (serverSocket != null && !serverSocket.isClosed()) {
                     try {
                         Socket socket = serverSocket.accept();
@@ -99,7 +99,9 @@ public class PacketServer {
                     } catch (IOException ex) {
                     }
                 }
-            }).start();
+            });
+            thread.setDaemon(true);
+            thread.start();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
