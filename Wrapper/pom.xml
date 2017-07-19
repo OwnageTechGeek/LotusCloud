@@ -10,7 +10,7 @@
 
     <repositories>
         <repository>
-            <id>public</id>
+            <id>lennarth</id>
             <url>https://www.lennarth.com/mvn/repository/public/</url>
         </repository>
     </repositories>
