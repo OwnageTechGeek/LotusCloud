@@ -18,10 +18,7 @@ import org.lotuscloud.api.packet.RegisterPacket;
 import org.lotuscloud.api.packet.RegisteredPacket;
 import org.lotuscloud.api.packet.StartServerPacket;
 import org.lotuscloud.master.web.WebServer;
-import org.lotuscloud.master.webhandler.Dashboard;
-import org.lotuscloud.master.webhandler.Groups;
-import org.lotuscloud.master.webhandler.MainWebHandler;
-import org.lotuscloud.master.webhandler.Style;
+import org.lotuscloud.master.webhandler.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -178,5 +175,6 @@ public class Master {
         webServer.registerHandler("login", main);
         webServer.registerHandler("dashboard", new Dashboard());
         webServer.registerHandler("groups", new Groups());
+        webServer.registerHandler("logout", new Logout());
     }
 }

@@ -69,7 +69,7 @@ public class WebServer {
                                 String[] preContent = handlerName.split("\\.");
                                 String content = !handlerName.contains(".") ? "html" : preContent[preContent.length - 1];
 
-                                response = content.equalsIgnoreCase("html") ? HTML.head + response + HTML.footer : response;
+                                response = content.equalsIgnoreCase("html") ? HTML.head + HTML.navbar(handlerName) + response + HTML.footer : response;
 
                                 out.write("HTTP/1.0 200 OK\r\n");
                                 out.write("Content-Type: text/" + content + "; charset=utf-8\r\n");

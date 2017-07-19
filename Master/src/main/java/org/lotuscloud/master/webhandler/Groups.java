@@ -18,7 +18,7 @@ public class Groups extends WebHandler {
                 "<h2>" + Master.instance.language.get("groups") + "</h2>" +
                 "<div class='group'>" +
                 "<p>Test</p>" +
-                "<button formaction='groups?edit=1'>" + Master.instance.language.get("edit") + "</button>" +
+                "<button>" + Master.instance.language.get("edit") + "</button>" +
                 "</div>" +
                 "</div>";
     }

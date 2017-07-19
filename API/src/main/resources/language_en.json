@@ -15,5 +15,6 @@
   "wrong_login": "Your username or password is wrong",
   "login": "Login",
   "username": "Username",
-  "password": "Password"
+  "password": "Password",
+  "logout": "Logout"
 }
