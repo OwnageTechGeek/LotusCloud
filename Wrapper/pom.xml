@@ -11,7 +11,7 @@
     <repositories>
         <repository>
             <id>public</id>
-            <url>https://mvn.lennarth.com/repository/public/</url>
+            <url>https://www.lennarth.com/mvn/repository/public/</url>
         </repository>
     </repositories>
 

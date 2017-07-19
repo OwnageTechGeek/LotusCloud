@@ -11,14 +11,14 @@
     <repositories>
         <repository>
             <id>lennarth</id>
-            <url>https://mvn.lennarth.com/repository/public/</url>
+            <url>https://www.lennarth.com/mvn/repository/public/</url>
         </repository>
     </repositories>
 
     <distributionManagement>
         <repository>
             <id>lennarth</id>
-            <url>https://mvn.lennarth.com/repository/public/</url>
+            <url>https://www.lennarth.com/mvn/repository/public/</url>
         </repository>
     </distributionManagement>
 
