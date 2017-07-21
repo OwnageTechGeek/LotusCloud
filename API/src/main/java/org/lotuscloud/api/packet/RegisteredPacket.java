@@ -4,7 +4,7 @@ import org.lotuscloud.api.network.Packet;
 
 /**
  * Copyright (c) 2017 Lennart Heinrich
- * www.lennarth.com
+ * www.lheinrich.com
  */
 public class RegisteredPacket extends Packet {
 

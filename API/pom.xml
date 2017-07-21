@@ -10,15 +10,15 @@
 
     <repositories>
         <repository>
-            <id>lennarth</id>
-            <url>https://www.lennarth.com/mvn/repository/public/</url>
+            <id>lheinrich</id>
+            <url>https://www.lheinrich.com/mvn/repository/public/</url>
         </repository>
     </repositories>
 
     <distributionManagement>
         <repository>
-            <id>lennarth</id>
-            <url>https://www.lennarth.com/mvn/repository/public/</url>
+            <id>lheinrich</id>
+            <url>https://www.lheinrich.com/mvn/repository/public/</url>
         </repository>
     </distributionManagement>
 

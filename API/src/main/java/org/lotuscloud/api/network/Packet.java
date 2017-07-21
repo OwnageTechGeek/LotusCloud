@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * Copyright (c) 2017 Lennart Heinrich
- * www.lennarth.com
+ * www.lheinrich.com
  */
 public class Packet implements Serializable {
 

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 /**
  * Copyright (c) 2017 Lennart Heinrich
- * www.lennarth.com
+ * www.lheinrich.com
  */
 public abstract class Handler {
     public abstract Packet handle(Packet packet, String client) throws IOException;

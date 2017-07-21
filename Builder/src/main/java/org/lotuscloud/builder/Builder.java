@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 /**
  * Copyright (c) 2017 Lennart Heinrich
- * www.lennarth.com
+ * www.lheinrich.com
  */
 public class Builder {
 
