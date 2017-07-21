@@ -86,7 +86,7 @@ public class Wrapper {
 
         System.out.println("Wrapper - Copyright (c) 2017 Lennart Heinrich");
         System.out.println("www.lennarth.com - www.lotuscloud.org");
-        
+
         System.out.println("Licensed under the Apache License, Version 2");
 
         if (!Files.exists(Paths.get("license-terms.txt")) || !new String(Files.readAllBytes(Paths.get("license-terms.txt"))).replace(" ", "").equalsIgnoreCase("accepted=true")) {
