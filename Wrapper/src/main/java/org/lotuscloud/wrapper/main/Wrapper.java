@@ -2,8 +2,8 @@ package org.lotuscloud.wrapper.main;
 
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
-import com.lennarth.jxutils.JsonLanguage;
-import com.lennarth.jxutils.Language;
+import com.lheinrich.jxutils.JsonLanguage;
+import com.lheinrich.jxutils.Language;
 import org.lotuscloud.api.console.ConsoleReader;
 import org.lotuscloud.api.crypt.Crypter;
 import org.lotuscloud.api.logging.LogLevel;

@@ -79,7 +79,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.lennarth</groupId>
+            <groupId>com.lheinrich</groupId>
             <artifactId>jxutils</artifactId>
             <version>LATEST</version>
         </dependency>
