@@ -7,6 +7,6 @@ Forum: https://www.lotuscloud.org
 ### Support und Contact
 - <a href="https://github.com/NexusByte/LotusCloud/issues">Open Issue</a>
 - Discord: https://discord.gg/dYCJt4Z
-- E-Mail: craftphd@gmail.com
+- E-Mail: admin@lheinrich.com
 - Forum: https://www.lotuscloud.org
 - Twitter: https://twitter.com/LotusCloudOrg
