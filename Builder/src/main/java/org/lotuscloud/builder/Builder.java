@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class Builder {
 
     public static void main(String[] args) throws InterruptedException, IOException {
-        System.out.println("Starting LotusCloud Builder...\nExit with CTRL + C");
+        System.out.println("Starting LotusCloud Builder...\nCopyright (c) 2017 Lennart Heinrich\nExit with CTRL + C");
 
         Thread.sleep(3000);
 

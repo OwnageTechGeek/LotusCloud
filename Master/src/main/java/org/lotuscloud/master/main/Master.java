@@ -97,7 +97,7 @@ public class Master {
         System.out.println("    __          __             ________                __\n   / /   ____  / /___  _______/ ____/ /___  __  ______/ /\n  / /   / __ \\/ __/ / / / ___/ /   / / __ \\/ / / / __  / \n / /___/ /_/ / /_/ /_/ (__  ) /___/ / /_/ / /_/ / /_/ /  \n/_____/\\____/\\__/\\__,_/____/\\____/_/\\____/\\__,_/\\__,_/\n");
 
         System.out.println("Master - Copyright (c) 2017 Lennart Heinrich");
-        System.out.println("www.lennarth.com - www.lotuscloud.org");
+        System.out.println("www.lheinrich.com - www.lotuscloud.org");
 
         System.out.println("Licensed under the Apache License, Version 2");
 
