@@ -8,4 +8,4 @@ Open Source Minecraft Cloud System
 - E-Mail: admin@lheinrich.com
 - Twitter: https://twitter.com/LotusCloudOrg
 
-- German Forum: https://www.dev-talk.net
+- Support Forum (German): https://www.lheinrich.com
