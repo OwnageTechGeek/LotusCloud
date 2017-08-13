@@ -1,6 +1,6 @@
 ## LotusCloud
 
-Open Source Minecraft Cloud System
+LotusCloud is an open source Cloud System for Minecraft servers.
 
 ### Support und Contact
 - <a href="https://github.com/NexusByte/LotusCloud/issues">Open Issue</a>
