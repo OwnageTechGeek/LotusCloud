@@ -1,2 +1,2 @@
 Features und Bugs? -> Issues<br>
-Mitwirken? -> Fork + Pull Request
+Want to Contribute? -> Fork + Pull Request
